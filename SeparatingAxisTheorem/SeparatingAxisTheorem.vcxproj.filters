@@ -15,38 +15,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Camera.cpp">
+    <ClCompile Include="Cube.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Cube.cpp">
+    <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.cpp">
+    <ClCompile Include="GameWorld.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\main.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ObjLoader.cpp">
+    <ClCompile Include="ObjLoader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ShaderHelpers.cpp">
+    <ClCompile Include="ShaderHelpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Shape.cpp">
+    <ClCompile Include="Shape.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Triangle.cpp">
+    <ClCompile Include="Triangle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Cube.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -60,6 +54,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Triangle.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -18,6 +18,7 @@ using namespace glm;
 
 Shape* triangle;
 Shape* cube;
+Shape* carShape;
 Shape* teapot;
 
 float r;
@@ -32,11 +33,14 @@ double lastFrameTime;
 extern bool mouseButtonHeld;
 extern bool isWireFrame;
 extern Camera* camera;
+extern vec3 carVelocity;
+extern float carRot;
 int currentIndex = 0;
 float dt;
 
 Triangle** ObjectList;
 Cube* model;
+Cube* car;
 Cube* teapotModel;
 
 void init()
@@ -113,9 +117,11 @@ void init()
 	GLushort* teaFaces = &(teapotNumFaces[0]);
 
 	cube = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
+	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
 	teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
+	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
 	teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -153,7 +159,9 @@ void update()
 	ObjectList[i]->Update(dt);
 	}
 	}*/
-
+	car->velocity = carVelocity;
+	car->spinSpeed = carRot;
+	car->Update(dt);
 	//model->Update(dt);
 	teapotModel->Update(dt);
 
@@ -186,8 +194,9 @@ void draw()
 	}
 	}*/
 
-	model->Draw();
-	teapotModel->Draw();
+	//model->Draw();
+	//teapotModel->Draw();
+	car->Draw();
 
 	glFlush();
 }

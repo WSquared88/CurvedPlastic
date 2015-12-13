@@ -44,6 +44,7 @@ public:
 	vec3 rotateVec;
 	vec3 scaleVec;
 	vec3 color;
+	vec3 forward;
 	bool isVisible;
 	vec3 velocity;
 	vec3 force;
