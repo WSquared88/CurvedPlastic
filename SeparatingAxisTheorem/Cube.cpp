@@ -13,7 +13,8 @@ Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos,
 	sqr = s;
 	shaderIndex = index;
 	currentPos = startPos;
-	rotateVec = vec3(1, 0, 0);
+	rotateVec = vec3(0, 1, 0);
+	forward = vec3(sin(rotNum), 0, cos(rotNum));
 	rotNum = startRot;
 	spinSpeed = startSpin;
 	scaleVec = startScale;
@@ -37,10 +38,13 @@ void Cube::Update(float dt)
 {
 	//std::cout << "delta time " << dt << std::endl;
 	rotNum += spinSpeed;
-	/*velocity += force * dt;
+	forward = vec3(sin(rotNum), 0, cos(rotNum));
+	//float rotAngle = acos(dot(velocity, forward) / length(velocity) * length(forward));
+	velocity += force * dt;
 	velocity += velocity * -.1f;
+	//velocity = vec3(cos(rotAngle) * velocity.x + sin(rotAngle) * velocity.z, velocity.y, -sin(rotAngle) * velocity.x + cos(rotAngle) * velocity.z);
 	currentPos += velocity * dt;
-	force = vec3(0, 0, 0);*/
+	force = vec3(0, 0, 0);
 
 	//TODO multiply by dat ass
 	//vec3 surfaceNormal = CloseToWall();

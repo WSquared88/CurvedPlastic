@@ -11,18 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Camera.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Cube.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\main.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ObjLoader.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ShaderHelpers.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Shape.cpp" />
-    <ClCompile Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Triangle.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ObjLoader.cpp" />
+    <ClCompile Include="ShaderHelpers.cpp" />
+    <ClCompile Include="Shape.cpp" />
+    <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Camera.h" />
-    <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Cube.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Cube.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ObjLoader.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ShaderHelpers.h" />
