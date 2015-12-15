@@ -195,7 +195,7 @@ void draw()
 	}*/
 
 	//model->Draw();
-	teapotModel->Draw();
+	//teapotModel->Draw();
 	car->Draw();
 
 	glFlush();

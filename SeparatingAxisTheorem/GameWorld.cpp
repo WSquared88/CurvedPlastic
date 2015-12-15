@@ -1,5 +1,6 @@
 #include <iostream>
 
+#include "Cube.h"
 #include "GameWorld.h"
 #include "Camera.h"
 
@@ -14,6 +15,7 @@ float rotSpeed = 0.03f;
 vec3 carVelocity = { 0, 0, 0 };
 float carRot;
 extern float dt;
+extern Cube* car;
 
 vec3 getCursorPos(GLFWwindow* windowPtr)
 {
@@ -72,11 +74,11 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	}
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		carVelocity.z = carSpeed;
+		car->force = car->forward*.0001f;
 	}
 	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		carVelocity.z = -carSpeed;
+		car->force = -car->forward*.0001f;
 	}
 	if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
 	{
