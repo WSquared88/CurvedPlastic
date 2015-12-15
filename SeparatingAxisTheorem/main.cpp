@@ -41,7 +41,7 @@ float dt;
 Triangle** ObjectList;
 Cube* model;
 Cube* car;
-Cube* teapotModel;
+//Cube* teapotModel;
 
 void init()
 {
@@ -99,13 +99,13 @@ void init()
 
 	vector<GLfloat> faces;
 	vector<GLushort> numFaces;
-	vector<GLfloat> teapotFaces;
-	vector<GLushort> teapotNumFaces;
+	//vector<GLfloat> teapotFaces;
+	//vector<GLushort> teapotNumFaces;
 	vector<vec3> verts;
-	vector<vec3> teapotVerts;
+	//vector<vec3> teapotVerts;
 
 	loadObj("box.obj", faces, numFaces, verts);
-	loadObj("teapot.obj", teapotFaces, teapotNumFaces, teapotVerts);
+	//loadObj("teapot.obj", teapotFaces, teapotNumFaces, teapotVerts);
 	cout << "done loading" << endl;
 
 	cout << faces.size() << endl;
@@ -113,16 +113,16 @@ void init()
 	cout << "convert verts" << endl;
 	GLushort* modelFaces = &(numFaces[0]);
 	cout << "convert faces" << endl;
-	GLfloat* teaVerts = &(teapotFaces[0]);
-	GLushort* teaFaces = &(teapotNumFaces[0]);
+	//GLfloat* teaVerts = &(teapotFaces[0]);
+	//GLushort* teaFaces = &(teapotNumFaces[0]);
 
 	cube = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
 	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
-	teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
+	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
 	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
-	teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
+	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
 	glClearColor(r, g, b, 1.0f);
@@ -159,11 +159,11 @@ void update()
 	ObjectList[i]->Update(dt);
 	}
 	}*/
-	car->velocity = carVelocity;
+	//car->velocity = carVelocity;
 	car->spinSpeed = carRot;
 	car->Update(dt);
 	//model->Update(dt);
-	teapotModel->Update(dt);
+	//teapotModel->Update(dt);
 
 	mat4 ProjectionMatrix = camera->getProjectionMatrix();
 	mat4 ViewMatrix = camera->getViewMatrix();

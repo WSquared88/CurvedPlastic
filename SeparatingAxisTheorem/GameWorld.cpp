@@ -56,6 +56,8 @@ void mouseClick(GLFWwindow* windowPtr, int button, int action, int mods)
 
 void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods)
 {
+	float fractionSpeed = .0005f;
+
 	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		camera->position += camera->getForward() * dt * camera->getSpeed();
@@ -74,15 +76,15 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	}
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force = car->forward*.0001f;
+		car->force += car->forward*fractionSpeed;
 	}
 	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force = -car->forward*.0001f;
+		car->force += -car->forward*fractionSpeed;
 	}
 	if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
 	{
-		carVelocity.z = 0;
+		//carVelocity.z = 0;
 	}
 	if (key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 	{

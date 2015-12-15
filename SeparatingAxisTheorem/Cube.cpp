@@ -46,7 +46,7 @@ void Cube::Update(float dt)
 	currentPos += velocity * dt;
 	force = vec3(0, 0, 0);
 
-	//TODO multiply by dat ass
+	//TODO multiply by dat mass
 	//vec3 surfaceNormal = CloseToWall();
 
 	/*if (surfaceNormal != vec3(0, 0, 0))
