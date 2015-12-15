@@ -78,7 +78,7 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	{
 		carVelocity.z = -carSpeed;
 	}
-	if (key == GLFW_KEY_UP || key == GLFW_KEY_DOWN && action == GLFW_RELEASE)
+	if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
 	{
 		carVelocity.z = 0;
 	}
