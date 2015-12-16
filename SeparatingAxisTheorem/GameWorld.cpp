@@ -14,6 +14,8 @@ Camera* camera;
 float rotSpeed = 0.03f;
 extern float dt;
 extern Cube* car;
+extern Cube* bullet;
+bool bulletFired = false;
 
 vec3 getCursorPos(GLFWwindow* windowPtr)
 {
@@ -126,5 +128,37 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 	{
 		exit(EXIT_SUCCESS);
+	}
+	if (key == GLFW_KEY_SPACE && action == GLFW_PRESS)
+	{
+		if (bulletFired == false)
+		{
+			bullet->currentPos = car->currentPos;
+			bullet->currentPos.y += 0.5;
+			bullet->rotNum = car->rotNum;
+			bullet->forward = vec3(sin(bullet->rotNum), 0, cos(bullet->rotNum));
+			bullet->force = bullet->forward * -0.005f;
+			bulletFired = true;
+		}
+		else
+		{
+			vec3 velTest = bullet->velocity;
+			if (velTest.x < 0)
+			{
+				velTest.x *= -1;
+			}
+			if (velTest.y < 0)
+			{
+				velTest.y *= -1;
+			}
+			if (velTest.z < 0)
+			{
+				velTest.z *= -1;
+			}
+			if (velTest.x < 0.0001 && velTest.y < 0.0001 && velTest.z < 0.0001)
+			{
+				bulletFired = false;
+			}
+		}
 	}
 }

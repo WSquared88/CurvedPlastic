@@ -40,6 +40,7 @@ Triangle** ObjectList;
 Cube* model;
 Cube* plane;
 Cube* car;
+Cube* bullet;
 //Cube* teapotModel;
 
 void init()
@@ -122,6 +123,7 @@ void init()
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
 	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
 	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
+	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -160,6 +162,7 @@ void update()
 	}
 	}*/
 	car->Update(dt);
+	bullet->Update(dt);
 	//model->Update(dt);
 	//teapotModel->Update(dt);
 	camera->position = car->currentPos + vec3(2 * sin(car->rotNum), 1, 2 * cos(car->rotNum));
@@ -196,6 +199,7 @@ void draw()
 	//model->Draw();
 	//teapotModel->Draw();
 	car->Draw();
+	bullet->Draw();
 	plane->Draw();
 	glFlush();
 }
