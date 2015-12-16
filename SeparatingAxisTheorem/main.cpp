@@ -19,6 +19,8 @@ using namespace glm;
 Shape* triangle;
 Shape* cube;
 Shape* carShape;
+Shape* groundShape;
+Shape* wallShape;
 Shape* teapot;
 
 float r;
@@ -42,6 +44,10 @@ Cube* model;
 Cube* plane;
 Cube* car;
 Cube* bullet;
+Cube* wall1;
+Cube* wall2;
+Cube* wall3;
+Cube* wall4;
 vector<Cube*> obstacles;
 //Cube* teapotModel;
 
@@ -120,26 +126,32 @@ void init()
 
 	cube = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
 	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
+	groundShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "ground.jpg");
+	wallShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "wall.jpg");
 	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
 	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
-	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
+	plane = new Cube(groundShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0, -25), 0, 0.0f, vec3(50, 0.001, 50), vec3(238, 130, 238), verts);
+	wall1 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, -25), 0, 0.0f, vec3(50, 10, 0.001), vec3(238, 130, 238), verts);
+	wall2 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, 75), 0, 0.0f, vec3(50, 10, 0.001), vec3(238, 130, 238), verts);
+	wall3 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(25, 5, -25), 0, 0.0f, vec3(0.001, 10, 50), vec3(238, 130, 238), verts);
+	wall4 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-75, 5, -25), 0, 0.0f, vec3(0.001, 10, 50), vec3(238, 130, 238), verts);
 	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10000, -10000, -10000), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
 	obstacles = vector<Cube*>();
-	// keep any obstacles added within these X (-14 , 4) and Z (-4 , 14) values
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(4, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 14), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-14, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, -4), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(2, 0.1, 12), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(3, 0.1, 10), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-12, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10, 0.1, -1), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(1, 0.1, 5), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-8, 0.1, 7), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-9, 0.1, 3), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, -4), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	// keep any obstacles added within these X (-75 , 25) and Z (-25 , 75) values
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-40, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, 14), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-64, 0.5, 30), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(10, 0.5, 47), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(15, 0.5, 24), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(3, 0.5, 60), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-32, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0.5, 20), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(1, 0.5, 5), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-18, 0.5, 7), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-9, 0.5, 3), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, -4), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -249,6 +261,10 @@ void draw()
 		obstacles[i]->Draw();
 	}
 	plane->Draw();
+	wall1->Draw();
+	wall2->Draw();
+	wall3->Draw();
+	wall4->Draw();
 	glFlush();
 }
 

@@ -10,6 +10,7 @@ class Shape
 		~Shape(void);
 		GLuint VBO;
 		GLuint VAO;
+		GLuint texID;
 		GLsizei numVerts;
 		GLuint shaderIndex;
 		GLint offset;

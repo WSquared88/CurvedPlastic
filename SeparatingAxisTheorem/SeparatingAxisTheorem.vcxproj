@@ -26,7 +26,7 @@
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ObjLoader.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ShaderHelpers.h" />
-    <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Shape.h" />
+    <ClInclude Include="Shape.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Triangle.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

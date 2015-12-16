@@ -21,7 +21,7 @@ Shape::Shape(GLfloat vertices[], GLsizei numVert, GLint index, const char* textu
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(GL_FLOAT) * 8, 0);
 
-	GLuint texID = SOIL_load_OGL_texture(texture, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
+	texID = SOIL_load_OGL_texture(texture, SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_INVERT_Y);
 	glBindTexture(GL_TEXTURE_2D, texID);
 	glProgramUniform1i(shaderIndex, glGetUniformLocation(shaderIndex, "uniformTex"), 0);
 
@@ -45,6 +45,7 @@ void Shape::Draw(float x, float y, float xScale, float yScale)
 {
 	glProgramUniform3f(shaderIndex, scale, xScale, yScale, 1);
 	glProgramUniform3f(shaderIndex, offset, x, y, 1);
+	glBindTexture(GL_TEXTURE_2D, texID);
 	glBindVertexArray(VAO);
 	glDrawArrays(GL_TRIANGLES, 0, numVerts);
 	//glDrawElements(GL_TRIANGLES, numVerts, GL_UNSIGNED_SHORT, (void*)0);
