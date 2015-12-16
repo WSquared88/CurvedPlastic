@@ -76,22 +76,6 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
 		car->force += -car->forward*fractionSpeed*dt;
-		if (car->force.x > carMaxForce.x)
-		{
-			car->force.x = carMaxForce.x;
-		}
-		if (car->force.y > carMaxForce.y)
-		{
-			car->force.y = carMaxForce.y;
-		}
-		if (car->force.z > carMaxForce.z)
-		{
-			car->force.z = carMaxForce.z;
-		}
-	}
-	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
-	{
-		car->force += car->forward*fractionSpeed*dt;
 		if (car->force.x < -carMaxForce.x)
 		{
 			car->force.x = -carMaxForce.x;
@@ -104,7 +88,22 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 		{
 			car->force.z = -carMaxForce.z;
 		}
-		car->force += -car->forward*fractionSpeed;
+	}
+	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
+	{
+		car->force += car->forward*fractionSpeed*dt;
+		if (car->force.x > carMaxForce.x)
+		{
+			car->force.x = carMaxForce.x;
+		}
+		if (car->force.y > carMaxForce.y)
+		{
+			car->force.y = carMaxForce.y;
+		}
+		if (car->force.z > carMaxForce.z)
+		{
+			car->force.z = carMaxForce.z;
+		}
 	}
 	if (key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 	{

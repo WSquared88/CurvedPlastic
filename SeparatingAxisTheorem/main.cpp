@@ -120,8 +120,8 @@ void init()
 	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
-	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
-	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.00001, 10), vec3(238, 130, 238), verts);
+	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
+	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
