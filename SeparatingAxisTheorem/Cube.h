@@ -40,6 +40,7 @@ public:
 	void SetOBB();
 	void updateOBB();
 	void SetAABB();
+	void print();
 	void SetBoundingSphere();
 	Shape* sqr;
 	mat4 worldMatrix;

@@ -8,6 +8,11 @@ Cube::Cube(void)
 
 }
 
+Cube::~Cube()
+{
+
+}
+
 Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos, float startRot, float startSpin, vec3 startScale, vec3 c, vector<vec3> vertices)
 {
 	sqr = s;
@@ -32,6 +37,12 @@ Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos,
 	SetOBB();
 	SetAABB();
 	SetBoundingSphere();
+}
+
+void Cube::print()
+{
+	cout << "Center: " << OBB.c.x << ", " << OBB.c.y << ", " << OBB.c.z << endl;
+	cout << "Halfwidths: " << OBB.halfWidths.x << ", " << OBB.halfWidths.y << ", " << OBB.halfWidths.z << endl;
 }
 
 void Cube::Update(float dt)
