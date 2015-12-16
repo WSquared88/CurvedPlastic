@@ -42,6 +42,7 @@ Cube* model;
 Cube* plane;
 Cube* car;
 Cube* bullet;
+vector<Cube*> obstacles;
 //Cube* teapotModel;
 
 void init()
@@ -122,9 +123,23 @@ void init()
 	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
-	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
+	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
 	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
 	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10000, -10000, -10000), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
+	obstacles = vector<Cube*>();
+	// keep any obstacles added within these X (-14 , 4) and Z (-4 , 14) values
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(4, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 14), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-14, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, -4), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(2, 0.1, 12), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(3, 0.1, 10), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-12, 0.1, 0), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10, 0.1, -1), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(1, 0.1, 5), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-8, 0.1, 7), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-9, 0.1, 3), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, -4), 180, 0.0f, vec3(.1, .1, .1), vec3(0, 0, 0), verts));
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -184,6 +199,10 @@ void update()
 		bullet->isVisible = false;
 		bullet->currentPos = vec3(-10000, -10000, -10000);
 	}
+	for (int i = 0; i < obstacles.size(); i++)
+	{
+		obstacles[i]->Update(dt);
+	}
 	//model->Update(dt);
 	//teapotModel->Update(dt);
 	camera->position = car->currentPos + vec3(2 * sin(car->rotNum), 1, 2 * cos(car->rotNum));
@@ -224,6 +243,10 @@ void draw()
 	if (bullet->isVisible == true)
 	{
 		bullet->Draw();
+	}
+	for (int i = 0; i < obstacles.size(); i++)
+	{
+		obstacles[i]->Draw();
 	}
 	plane->Draw();
 	glFlush();
