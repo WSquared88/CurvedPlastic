@@ -75,7 +75,7 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	}
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force += car->forward*fractionSpeed*dt;
+		car->force += -car->forward*fractionSpeed*dt;
 		if (car->force.x > carMaxForce.x)
 		{
 			car->force.x = carMaxForce.x;
@@ -91,7 +91,7 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	}
 	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force += -car->forward*fractionSpeed*dt;
+		car->force += car->forward*fractionSpeed*dt;
 		if (car->force.x < -carMaxForce.x)
 		{
 			car->force.x = -carMaxForce.x;
