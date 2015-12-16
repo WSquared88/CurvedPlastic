@@ -37,7 +37,7 @@ void mouseMove(GLFWwindow* windowPtr, double x, double y)
 {
 	vec3 cursorPosition = getCursorPos(windowPtr);
 	glfwSetCursorPos(windowPtr, 800 / 2, 800 / 2);
-	camera->turn((float)((800/2)-x), (float)((800/2)-y), dt);
+	//camera->turn((float)((800/2)-x), (float)((800/2)-y), dt);
 }
 
 void mouseClick(GLFWwindow* windowPtr, int button, int action, int mods)
@@ -59,19 +59,19 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 
 	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		camera->position += camera->getForward() * dt * camera->getSpeed();
+		//camera->position += camera->getForward() * dt * camera->getSpeed();
 	}
 	if (key == GLFW_KEY_S && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		camera->position -= camera->getForward() * dt * camera->getSpeed();
+		//camera->position -= camera->getForward() * dt * camera->getSpeed();
 	}
 	if (key == GLFW_KEY_D && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		camera->position += camera->getRight() * dt * camera->getSpeed();
+		//camera->position += camera->getRight() * dt * camera->getSpeed();
 	}
 	if (key == GLFW_KEY_A && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		camera->position -= camera->getRight() * dt * camera->getSpeed();
+		//camera->position -= camera->getRight() * dt * camera->getSpeed();
 	}
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
@@ -104,11 +104,8 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 		{
 			car->force.z = -carMaxForce.z;
 		}
+		car->force += -car->forward*fractionSpeed;
 	}
-	//if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
-	//{
-	//	//carVelocity.z = 0;
-	//}
 	if (key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 	{
 		car->spinSpeed = 0;
