@@ -35,6 +35,7 @@ extern bool isWireFrame;
 extern Camera* camera;
 int currentIndex = 0;
 float dt;
+bool bulletFired;
 
 Triangle** ObjectList;
 Cube* model;
@@ -123,7 +124,7 @@ void init()
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
 	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
 	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
-	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
+	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10000, -10000, -10000), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -163,6 +164,26 @@ void update()
 	}*/
 	car->Update(dt);
 	bullet->Update(dt);
+	// check the bullet's velocity, stop drawing if really small
+	vec3 velTest = bullet->velocity;
+	if (velTest.x < 0)
+	{
+		velTest.x *= -1;
+	}
+	if (velTest.y < 0)
+	{
+		velTest.y *= -1;
+	}
+	if (velTest.z < 0)
+	{
+		velTest.z *= -1;
+	}
+	if (velTest.x < 0.0001 && velTest.y < 0.0001 && velTest.z < 0.0001)
+	{
+		bulletFired = false;
+		bullet->isVisible = false;
+		bullet->currentPos = vec3(-10000, -10000, -10000);
+	}
 	//model->Update(dt);
 	//teapotModel->Update(dt);
 	camera->position = car->currentPos + vec3(2 * sin(car->rotNum), 1, 2 * cos(car->rotNum));
@@ -199,7 +220,11 @@ void draw()
 	//model->Draw();
 	//teapotModel->Draw();
 	car->Draw();
-	bullet->Draw();
+	// only draw visible bullet
+	if (bullet->isVisible == true)
+	{
+		bullet->Draw();
+	}
 	plane->Draw();
 	glFlush();
 }
