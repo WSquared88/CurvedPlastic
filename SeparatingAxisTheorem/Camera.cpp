@@ -8,7 +8,7 @@ using namespace glm;
 
 Camera::Camera()
 {
-	position = vec3(0, 0, 1);
+	position = vec3(0, 1, 1);
 	pitch = 0.0f;
 	yaw = M_PI;
 	fov = 45.0f;

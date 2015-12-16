@@ -40,6 +40,7 @@ float dt;
 
 Triangle** ObjectList;
 Cube* model;
+Cube* plane;
 Cube* car;
 //Cube* teapotModel;
 
@@ -122,6 +123,7 @@ void init()
 
 	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
 	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 0, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
+	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.00001, 10), vec3(238, 130, 238), verts);
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
@@ -164,9 +166,10 @@ void update()
 	car->Update(dt);
 	//model->Update(dt);
 	//teapotModel->Update(dt);
-
+	camera->position = car->currentPos + vec3(2 * sin(car->rotNum), 1, 2 * cos(car->rotNum));
 	mat4 ProjectionMatrix = camera->getProjectionMatrix();
-	mat4 ViewMatrix = camera->getViewMatrix();
+	//mat4 ViewMatrix = camera->getViewMatrix();
+	mat4 ViewMatrix = lookAt(camera->position, car->currentPos, vec3(0, 1, 0));
 	mat4 ModelMatrix = mat4(1.0);
 	mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	
@@ -197,7 +200,7 @@ void draw()
 	//model->Draw();
 	//teapotModel->Draw();
 	car->Draw();
-
+	plane->Draw();
 	glFlush();
 }
 
