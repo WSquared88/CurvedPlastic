@@ -33,6 +33,7 @@ class Cube
 public:
 	Cube(void);
 	Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos, float startRot, float startSpin, vec3 startScale, vec3 c, vector<vec3> vertices);
+	bool TestOBBOBB(Cube &other);
 	~Cube(void);
 	void Update(float dt);
 	void Draw();
