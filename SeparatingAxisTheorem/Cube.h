@@ -19,6 +19,9 @@ class Cube
 		float maxY = FLT_MIN;
 		float minZ = FLT_MAX;
 		float maxZ = FLT_MIN;
+		vec3 c;
+		vector<vec3> axes;
+		vec3 halfWidths;
 	};
 
 	struct Sphere
@@ -34,6 +37,7 @@ public:
 	void Update(float dt);
 	void Draw();
 	void SetOBB();
+	void updateOBB();
 	void SetAABB();
 	void SetBoundingSphere();
 	Shape* sqr;

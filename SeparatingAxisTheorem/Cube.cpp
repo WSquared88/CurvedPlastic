@@ -60,6 +60,7 @@ void Cube::Update(float dt)
 	worldMatrix = translate(currentPos) * rotate(rotNum, rotateVec) * scale(scaleVec);
 	//SetAABB();
 	//SetOBB();
+	updateOBB();
 }
 
 void Cube::Draw()
@@ -103,7 +104,11 @@ void Cube::SetOBB()
 			OBB.minZ = verts[i].z;
 		}
 	}
-
+	OBB.c = vec3((OBB.maxX + OBB.minX) / 2, (OBB.maxY + OBB.minY) / 2, (OBB.maxZ + OBB.minZ) / 2);
+	OBB.axes.push_back(vec3(1, 0, 0));
+	OBB.axes.push_back(vec3(0, 1, 0));
+	OBB.axes.push_back(vec3(0, 0, 1));
+	OBB.halfWidths = vec3(abs((OBB.maxX - OBB.minX) / 2), abs((OBB.maxY - OBB.minY) / 2), abs((OBB.maxZ - OBB.minZ) / 2));
 	std::cout << "Min x " << OBB.minX << endl;
 	std::cout << "Max x " << OBB.maxX << endl;
 	std::cout << "Min y " << OBB.minY << endl;
@@ -111,6 +116,15 @@ void Cube::SetOBB()
 	std::cout << "Min z " << OBB.minZ << endl;
 	std::cout << "Max z " << OBB.maxZ << endl;
 	std::cout << endl;
+}
+
+void Cube::updateOBB()
+{
+	OBB.c = vec3(worldMatrix * vec4((OBB.maxX + OBB.minX) / 2, (OBB.maxY + OBB.minY) / 2, (OBB.maxZ + OBB.minZ) / 2, 0));
+	OBB.axes[0] = normalize(vec3(worldMatrix * vec4(1, 0, 0, 0)));
+	OBB.axes[1] = normalize(vec3(worldMatrix * vec4(0, 1, 0, 0)));
+	OBB.axes[2] = normalize(vec3(worldMatrix * vec4(0, 0, 1, 0)));
+	OBB.halfWidths = vec3(worldMatrix * vec4(abs((OBB.maxX - OBB.minX) / 2), abs((OBB.maxY - OBB.minY) / 2), abs((OBB.maxZ - OBB.minZ) / 2), 0));
 }
 
 void Cube::SetAABB()

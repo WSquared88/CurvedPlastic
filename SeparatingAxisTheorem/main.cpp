@@ -119,13 +119,91 @@ void init()
 	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
 	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
-	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
-	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
+	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 1, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
+	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(5, 1, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
 	plane = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-5, 0, -5), 0, 0.0f, vec3(10, 0.001, 10), vec3(238, 130, 238), verts);
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
 	glClearColor(r, g, b, 1.0f);
+}
+
+inline bool CollisionCheck(Cube* A, Cube* B)
+{
+
+	vector<vec3> Axes = { A->OBB.axes[0], A->OBB.axes[1], A->OBB.axes[2], B->OBB.axes[0], B->OBB.axes[1], B->OBB.axes[2]  };
+	vector<vec3> AAxes = { A->OBB.axes[0], A->OBB.axes[1], A->OBB.axes[2] };
+	vector<vec3> BAxes = { B->OBB.axes[0], B->OBB.axes[1], B->OBB.axes[2] };
+
+
+	vector<vec3> aCorners = vector<vec3>();
+	vector<vec3> bCorners = vector<vec3>();
+
+	for (int i = 0; i < AAxes.size(); i++)
+	{
+		for (int j = 0; j < BAxes.size(); j++)
+		{
+			Axes.push_back(cross(AAxes[i], BAxes[j]));
+		}
+	}
+
+	
+	for (int x = -1; x < 2; x += 2)
+	{
+		for (int y = -1; y < 2; y += 2)
+		{
+			for (int z = -1; z < 2; z += 2)
+			{
+				aCorners.push_back(A->OBB.c + ((float)x * A->OBB.axes[0] * A->OBB.halfWidths[0]) + ((float)y * A->OBB.axes[1] * A->OBB.halfWidths[1]) + ((float)z * A->OBB.axes[2] * A->OBB.halfWidths[2]));
+			}
+		}
+	}
+
+	for (int x = -1; x < 2; x += 2)
+	{
+		for (int y = -1; y < 2; y += 2)
+		{
+			for (int z = -1; z < 2; z += 2)
+			{
+				bCorners.push_back(B->OBB.c + ((float)x * B->OBB.axes[0] * B->OBB.halfWidths[0]) + ((float)y * B->OBB.axes[1] * B->OBB.halfWidths[1]) + ((float)z * B->OBB.axes[2] * B->OBB.halfWidths[2]));
+			}
+		}
+	}
+
+	for (int axis = 0; axis < Axes.size(); axis++)
+	{
+		vec3 rA = vec3(0, 0, 0);
+		vec3 rB = vec3(0, 0, 0);
+
+		vec3 currentAxis = Axes[axis];
+		for (int i = 0; i < aCorners.size(); i++)
+		{
+			vec3 aVert = aCorners[i];
+			if (dot(currentAxis, aVert - A->OBB.c) > dot(currentAxis, rA))
+			{
+				rA = aVert - A->OBB.c;
+			}
+
+		}
+
+		for (int j = 0; j < bCorners.size(); j++)
+		{
+			vec3 bVert = bCorners[j];
+			if (dot(currentAxis, bVert - B->OBB.c) > dot(currentAxis, rB))
+			{
+				rB = bVert - B->OBB.c;
+			}
+		}
+		float left = abs(dot(currentAxis, A->OBB.c - B->OBB.c));
+		float right = abs(dot(currentAxis, rA)) + abs(dot(currentAxis, rB));
+		if (left <= right)
+		{
+			return false;
+		}
+	}
+
+
+	return true;
 }
 
 void update()
@@ -160,7 +238,7 @@ void update()
 	}
 	}*/
 	car->Update(dt);
-	//model->Update(dt);
+	model->Update(dt);
 	//teapotModel->Update(dt);
 	camera->position = car->currentPos + vec3(2 * sin(car->rotNum), 1, 2 * cos(car->rotNum));
 	mat4 ProjectionMatrix = camera->getProjectionMatrix();
@@ -170,6 +248,11 @@ void update()
 	mat4 MVP = ProjectionMatrix * ViewMatrix * ModelMatrix;
 	
 	setShaderMatrix(shaderIndex, "cameraMatrix", MVP);
+
+	if (CollisionCheck(model, car))
+	{
+		cout << "Collision" << endl;
+	}
 
 	if (isWireFrame)
 	{
@@ -193,7 +276,7 @@ void draw()
 	}
 	}*/
 
-	//model->Draw();
+	model->Draw();
 	//teapotModel->Draw();
 	car->Draw();
 	plane->Draw();
