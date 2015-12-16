@@ -1,4 +1,5 @@
 #include <iostream>
+#include <glm/gtx/rotate_vector.hpp>
 
 #include "Cube.h"
 #include "GameWorld.h"
@@ -10,10 +11,7 @@ using namespace glm;
 bool mouseButtonHeld;
 bool isWireFrame;
 Camera* camera;
-float carSpeed = 0.001f;
 float rotSpeed = 0.03f;
-vec3 carVelocity = { 0, 0, 0 };
-float carRot;
 extern float dt;
 extern Cube* car;
 
@@ -56,7 +54,8 @@ void mouseClick(GLFWwindow* windowPtr, int button, int action, int mods)
 
 void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods)
 {
-	float fractionSpeed = .0005f;
+	float fractionSpeed = .00001f;
+	vec3 carMaxForce = vec3(1,1,1);
 
 	if (key == GLFW_KEY_W && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
@@ -76,27 +75,53 @@ void keyPress(GLFWwindow* windowPtr, int key, int scancode, int action, int mods
 	}
 	if (key == GLFW_KEY_UP && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force += car->forward*fractionSpeed;
+		car->force += car->forward*fractionSpeed*dt;
+		if (car->force.x > carMaxForce.x)
+		{
+			car->force.x = carMaxForce.x;
+		}
+		if (car->force.y > carMaxForce.y)
+		{
+			car->force.y = carMaxForce.y;
+		}
+		if (car->force.z > carMaxForce.z)
+		{
+			car->force.z = carMaxForce.z;
+		}
 	}
 	if (key == GLFW_KEY_DOWN && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		car->force += -car->forward*fractionSpeed;
+		car->force += -car->forward*fractionSpeed*dt;
+		if (car->force.x < -carMaxForce.x)
+		{
+			car->force.x = -carMaxForce.x;
+		}
+		if (car->force.y < -carMaxForce.y)
+		{
+			car->force.y = -carMaxForce.y;
+		}
+		if (car->force.z < -carMaxForce.z)
+		{
+			car->force.z = -carMaxForce.z;
+		}
 	}
-	if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
-	{
-		//carVelocity.z = 0;
-	}
+	//if ((key == GLFW_KEY_UP || key == GLFW_KEY_DOWN) && action == GLFW_RELEASE)
+	//{
+	//	//carVelocity.z = 0;
+	//}
 	if (key == GLFW_KEY_LEFT || key == GLFW_KEY_RIGHT && action == GLFW_RELEASE)
 	{
-		carRot = 0;
+		car->spinSpeed = 0;
 	}
 	if (key == GLFW_KEY_LEFT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		carRot = rotSpeed;
+		car->spinSpeed = rotSpeed;
+		car->velocity = rotate(car->velocity, rotSpeed, car->rotateVec);
 	}
 	if (key == GLFW_KEY_RIGHT && (action == GLFW_PRESS || action == GLFW_REPEAT))
 	{
-		carRot = -rotSpeed;
+		car->spinSpeed = -rotSpeed;
+		car->velocity = rotate(car->velocity, -rotSpeed, car->rotateVec);
 	}
 	if (key == GLFW_KEY_P && action == GLFW_PRESS)
 	{

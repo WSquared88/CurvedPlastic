@@ -1,13 +1,8 @@
-﻿Build started 12/15/2015 5:22:11 PM.
+﻿Build started 12/15/2015 9:24:23 PM.
      1>Project "Z:\IGMProfile\College\DSA 2\CurvedPlastic\SeparatingAxisTheorem\SeparatingAxisTheorem.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt main.cpp
-         main.cpp
-     1>z:\igmprofile\college\dsa 2\curvedplastic\separatingaxistheorem\main.cpp(123): warning C4316: 'Cube' : object allocated on the heap may not be aligned 16
-     1>z:\igmprofile\college\dsa 2\curvedplastic\separatingaxistheorem\main.cpp(124): warning C4316: 'Cube' : object allocated on the heap may not be aligned 16
-     1>z:\igmprofile\college\dsa 2\curvedplastic\separatingaxistheorem\main.cpp(52): warning C4101: 'vShaderCode' : unreferenced local variable
-     1>z:\igmprofile\college\dsa 2\curvedplastic\separatingaxistheorem\main.cpp(53): warning C4101: 'fShaderCode' : unreferenced local variable
-     1>z:\igmprofile\college\dsa 2\curvedplastic\separatingaxistheorem\main.cpp(134): warning C4244: '=' : conversion from 'double' to 'float', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /ZI /nologo /W3 /WX- /sdl /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt GameWorld.cpp
+         GameWorld.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"Z:\IGMProfile\College\DSA 2\CurvedPlastic\Debug\SeparatingAxisTheorem.exe" /INCREMENTAL /NOLOGO glew32.lib glfw3.lib opengl32.lib SOIL.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"Z:\IGMProfile\College\DSA 2\CurvedPlastic\Debug\SeparatingAxisTheorem.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"Z:\IGMProfile\College\DSA 2\CurvedPlastic\Debug\SeparatingAxisTheorem.lib" /MACHINE:X86 Debug\Camera.obj
          Debug\Cube.obj
@@ -32,4 +27,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:03.99
+Time Elapsed 00:00:04.74

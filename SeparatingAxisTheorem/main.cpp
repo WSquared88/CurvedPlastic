@@ -33,8 +33,6 @@ double lastFrameTime;
 extern bool mouseButtonHeld;
 extern bool isWireFrame;
 extern Camera* camera;
-extern vec3 carVelocity;
-extern float carRot;
 int currentIndex = 0;
 float dt;
 
@@ -159,8 +157,6 @@ void update()
 	ObjectList[i]->Update(dt);
 	}
 	}*/
-	//car->velocity = carVelocity;
-	car->spinSpeed = carRot;
 	car->Update(dt);
 	//model->Update(dt);
 	//teapotModel->Update(dt);
