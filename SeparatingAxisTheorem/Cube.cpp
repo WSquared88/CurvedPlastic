@@ -38,6 +38,8 @@ void Cube::Update(float dt)
 {
 	//std::cout << "delta time " << dt << std::endl;
 	rotNum += spinSpeed;
+
+
 	forward = vec3(sin(rotNum), 0, cos(rotNum));
 	//float rotAngle = acos(dot(velocity, forward) / length(velocity) * length(forward));
 	velocity += force * dt;
@@ -58,8 +60,13 @@ void Cube::Update(float dt)
 	//BoundsCheck();
 
 	worldMatrix = translate(currentPos) * rotate(rotNum, rotateVec) * scale(scaleVec);
+	//OBB.c = vec3(translate(currentPos) * rotate(spinSpeed, rotateVec) * vec4(OBB.c, 0));
+	OBB.axes[0] = normalize(vec3(rotate(spinSpeed, rotateVec) * vec4(OBB.axes[0], 0)));
+	OBB.axes[1] = normalize(vec3(rotate(spinSpeed, rotateVec) * vec4(OBB.axes[1], 0)));
+	OBB.axes[2] = normalize(vec3(rotate(spinSpeed, rotateVec) * vec4(OBB.axes[2], 0)));
 	//SetAABB();
 	//SetOBB();
+	//updateOBB();
 }
 
 void Cube::Draw()
@@ -103,7 +110,11 @@ void Cube::SetOBB()
 			OBB.minZ = verts[i].z;
 		}
 	}
-
+	OBB.c = vec3(translate(currentPos) * rotate(rotNum, rotateVec) * vec4((OBB.maxX + OBB.minX) / 2, (OBB.maxY + OBB.minY) / 2, (OBB.maxZ + OBB.minZ) / 2, 0));
+	OBB.axes.push_back(normalize(vec3(rotate(rotNum, rotateVec) * vec4(1, 0, 0, 0))));
+	OBB.axes.push_back(normalize(vec3(rotate(rotNum, rotateVec) * vec4(0, 1, 0, 0))));
+	OBB.axes.push_back(normalize(vec3(rotate(rotNum, rotateVec) * vec4(0, 0, 1, 0))));
+	OBB.halfWidths = vec3(scale(scaleVec) * vec4(abs((OBB.maxX - OBB.minX) / 2), abs((OBB.maxY - OBB.minY) / 2), abs((OBB.maxZ - OBB.minZ) / 2), 0));
 	std::cout << "Min x " << OBB.minX << endl;
 	std::cout << "Max x " << OBB.maxX << endl;
 	std::cout << "Min y " << OBB.minY << endl;
@@ -111,6 +122,142 @@ void Cube::SetOBB()
 	std::cout << "Min z " << OBB.minZ << endl;
 	std::cout << "Max z " << OBB.maxZ << endl;
 	std::cout << endl;
+}
+
+bool Cube::TestOBBOBB(Cube &B)
+{
+	float ra, rb;
+	mat3 R, AbsR;
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			R[i][j] = dot(this->OBB.axes[i], B.OBB.axes[j]);
+
+		}
+	}
+
+	vec3 t = vec3(this->worldMatrix * vec4(this->OBB.c, 1) - B.worldMatrix * vec4(B.OBB.c, 1));
+	t = vec3(dot(t, this->OBB.axes[0]), dot(t, this->OBB.axes[1]), dot(t, this->OBB.axes[2]));
+
+	for (int i = 0; i < 3; i++)
+	{
+		for (int j = 0; j < 3; j++)
+		{
+			AbsR[i][j] = abs(R[i][j]) + FLT_EPSILON;
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		ra = this->OBB.halfWidths[i];
+		rb = B.OBB.halfWidths[0] * AbsR[i][0] + B.OBB.halfWidths[1] * AbsR[i][1] + B.OBB.halfWidths[2] * AbsR[i][2];
+		if (abs(t[i]) > ra + rb)
+		{
+			return false;
+		}
+	}
+
+	for (int i = 0; i < 3; i++)
+	{
+		ra = this->OBB.halfWidths[0] * AbsR[0][i] + this->OBB.halfWidths[1] * AbsR[1][i] + this->OBB.halfWidths[2] * AbsR[2][i];
+		rb = B.OBB.halfWidths[i];
+		if (abs(t[0] * R[0][i] + t[1] * R[1][i] + t[2] * R[2][i]) > ra + rb)
+		{
+			return false;
+		}
+	}
+
+	//Testing Ax X Bx
+	ra = this->OBB.halfWidths[1] * AbsR[2][0] + this->OBB.halfWidths[2] * AbsR[1][0];
+	rb = B.OBB.halfWidths[1] * AbsR[0][2] + B.OBB.halfWidths[2] * AbsR[0][1];
+
+	if (abs(t[2] * R[1][0] - t[1] * R[2][2]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Ax X By
+	ra = this->OBB.halfWidths[1] * AbsR[2][2] + this->OBB.halfWidths[2] * AbsR[1][2];
+	rb = B.OBB.halfWidths[0] * AbsR[0][1] + B.OBB.halfWidths[1] * AbsR[0][0];
+	if (abs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Ax X Bz
+	ra = this->OBB.halfWidths[1] * AbsR[2][2] + this->OBB.halfWidths[2] * AbsR[1][2];
+	rb = B.OBB.halfWidths[0] * AbsR[0][1] + B.OBB.halfWidths[1] * AbsR[0][0];
+	if (abs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Ay X Bx
+	ra = this->OBB.halfWidths[0] * AbsR[2][0] + this->OBB.halfWidths[2] * AbsR[0][0];
+	rb = B.OBB.halfWidths[1] * AbsR[1][2] + B.OBB.halfWidths[2] * AbsR[1][1];
+	if (abs(t[0] * R[2][0] - t[2] * R[0][0]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Ay X By
+	ra = this->OBB.halfWidths[0] * AbsR[2][1] + this->OBB.halfWidths[2] * AbsR[0][1];
+	rb = B.OBB.halfWidths[0] * AbsR[1][2] + B.OBB.halfWidths[2] * AbsR[1][0];
+	if (abs(t[0] * R[2][1] - t[2] * R[0][1]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Ay X Bz
+	ra = this->OBB.halfWidths[0] * AbsR[2][2] + this->OBB.halfWidths[2] * AbsR[0][2];
+	rb = B.OBB.halfWidths[0] * AbsR[1][1] + B.OBB.halfWidths[1] * AbsR[1][0];
+	if (abs(t[0] * R[2][2] - t[2] * R[0][2]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Az X Bx
+	ra = this->OBB.halfWidths[0] * AbsR[1][0] + this->OBB.halfWidths[1] * AbsR[0][0];
+	rb = B.OBB.halfWidths[1] * AbsR[2][2] + B.OBB.halfWidths[2] * AbsR[2][1];
+	if (abs(t[1] * R[0][0] - t[0] * R[1][0]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Az X By
+	ra = this->OBB.halfWidths[0] * AbsR[1][1] + this->OBB.halfWidths[1] * AbsR[0][1];
+	rb = B.OBB.halfWidths[0] * AbsR[2][2] + B.OBB.halfWidths[2] * AbsR[2][0];
+	if (abs(t[1] * R[0][1] - t[0] * R[1][1]) > ra + rb)
+	{
+		return false;
+	}
+
+	//Testing Az X Bz
+	ra = this->OBB.halfWidths[0] * AbsR[1][2] + this->OBB.halfWidths[1] * AbsR[0][2];
+	rb = B.OBB.halfWidths[0] * AbsR[2][1] + B.OBB.halfWidths[1] * AbsR[2][0];
+	if (abs(t[1] * R[0][2] - t[0] * R[1][2]) > ra + rb)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+void Cube::updateOBB()
+{
+	OBB.c = vec3(translate(currentPos) * rotate(rotNum, rotateVec) * vec4((OBB.maxX + OBB.minX) / 2, (OBB.maxY + OBB.minY) / 2, (OBB.maxZ + OBB.minZ) / 2, 0));
+	OBB.axes[0] = normalize(vec3(rotate(rotNum, rotateVec ) * vec4(1, 0, 0, 0)));
+	OBB.axes[1] = normalize(vec3(rotate(rotNum, rotateVec ) * vec4(0, 1, 0, 0)));
+	OBB.axes[2] = normalize(vec3(rotate(rotNum, rotateVec ) * vec4(0, 0, 1, 0)));
+	OBB.halfWidths = vec3(scale(scaleVec) * vec4(abs((OBB.maxX - OBB.minX) / 2), abs((OBB.maxY - OBB.minY) / 2), abs((OBB.maxZ - OBB.minZ) / 2), 0));
+	//std::cout << "Center: " << OBB.c.x << ", " << OBB.c.y << ", " << OBB.c.z << endl;
+	/*for (int i = 0; i < 8; i++)
+	{
+		vec3 v = OBB.c 
+		//std::cout << "Corner " << i << 
+	}*/
 }
 
 void Cube::SetAABB()
