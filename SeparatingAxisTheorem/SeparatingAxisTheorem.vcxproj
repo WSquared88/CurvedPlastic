@@ -12,9 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="ColliderTree.cpp" />
     <ClCompile Include="Cube.cpp" />
     <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="ObjLoader.cpp" />
     <ClCompile Include="ShaderHelpers.cpp" />
     <ClCompile Include="Shape.cpp" />
@@ -22,10 +24,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="ColliderTree.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\GameWorld.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ObjLoader.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\ShaderHelpers.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="Shape.h" />
     <ClInclude Include="..\..\BoundingBoxesAndSpheres\BoundingBoxesAndSpheres\Triangle.h" />
   </ItemGroup>

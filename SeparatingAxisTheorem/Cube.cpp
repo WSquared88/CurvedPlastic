@@ -13,7 +13,7 @@ Cube::~Cube()
 
 }
 
-Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos, float startRot, float startSpin, vec3 startScale, vec3 c, vector<vec3> vertices)
+Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos, float startRot, float startSpin, vec3 startScale, vec3 c, vector<vec3> vertices, bool isW)
 {
 	sqr = s;
 	shaderIndex = index;
@@ -24,7 +24,8 @@ Cube::Cube(Shape* s, GLint index, GLushort faces[], int numFaces, vec3 startPos,
 	spinSpeed = startSpin;
 	scaleVec = startScale;
 	color = c;
-	isVisible = false;
+	isVisible = true;
+	isWall = isW;
 	verts = vertices;
 
 	worldMatrix = translate(currentPos) * rotate(rotNum, rotateVec) * scale(scaleVec);
@@ -184,15 +185,15 @@ bool Cube::TestOBBOBB(Cube &B)
 	ra = this->OBB.halfWidths[1] * AbsR[2][0] + this->OBB.halfWidths[2] * AbsR[1][0];
 	rb = B.OBB.halfWidths[1] * AbsR[0][2] + B.OBB.halfWidths[2] * AbsR[0][1];
 
-	if (abs(t[2] * R[1][0] - t[1] * R[2][2]) > ra + rb)
+	if (abs(t[2] * R[1][0] - t[1] * R[2][0]) > ra + rb)
 	{
 		return false;
 	}
 
 	//Testing Ax X By
-	ra = this->OBB.halfWidths[1] * AbsR[2][2] + this->OBB.halfWidths[2] * AbsR[1][2];
-	rb = B.OBB.halfWidths[0] * AbsR[0][1] + B.OBB.halfWidths[1] * AbsR[0][0];
-	if (abs(t[2] * R[1][2] - t[1] * R[2][2]) > ra + rb)
+	ra = this->OBB.halfWidths[1] * AbsR[2][1] + this->OBB.halfWidths[2] * AbsR[1][1];
+	rb = B.OBB.halfWidths[0] * AbsR[0][2] + B.OBB.halfWidths[2] * AbsR[0][0];
+	if (abs(t[2] * R[1][1] - t[1] * R[2][1]) > ra + rb)
 	{
 		return false;
 	}
@@ -255,6 +256,7 @@ bool Cube::TestOBBOBB(Cube &B)
 
 	return true;
 }
+
 
 void Cube::updateOBB()
 {

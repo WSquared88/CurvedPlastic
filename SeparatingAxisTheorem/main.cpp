@@ -12,6 +12,7 @@
 #include "GameWorld.h"
 #include "ObjLoader.h"
 #include "Camera.h"
+#include "ColliderTree.h"
 
 using namespace std;
 using namespace glm;
@@ -20,6 +21,7 @@ Shape* triangle;
 Shape* cube;
 Shape* carShape;
 Shape* groundShape;
+Shape* objectShape;
 Shape* wallShape;
 Shape* teapot;
 
@@ -41,6 +43,9 @@ bool bulletFired;
 
 Triangle** ObjectList;
 Cube* model;
+Cube* model1;
+Cube* model2;
+Cube* model3;
 Cube* plane;
 Cube* car;
 Cube* bullet;
@@ -50,6 +55,7 @@ Cube* wall3;
 Cube* wall4;
 vector<Cube*> obstacles;
 //Cube* teapotModel;
+ColliderTree treant;
 
 void init()
 {
@@ -125,37 +131,56 @@ void init()
 	//GLushort* teaFaces = &(teapotNumFaces[0]);
 
 	cube = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
-	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "archer.jpg");
+	carShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "car.jpg");
+	objectShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "object.jpg");
 	groundShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "ground.jpg");
 	wallShape = new Shape(modelVerts, numFaces.size(), shaderIndex, "wall.jpg");
 	//teapot = new Shape(teaVerts, teapotNumFaces.size(), shaderIndex, "archer.jpg");
 
-	model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, .03f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
-	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts);
-	plane = new Cube(groundShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0, -25), 0, 0.0f, vec3(50, 0.01, 50), vec3(238, 130, 238), verts);
-	wall1 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, -25), 0, 0.0f, vec3(50, 10, 0.01), vec3(238, 130, 238), verts);
-	wall2 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, 75), 0, 0.0f, vec3(50, 10, 0.01), vec3(238, 130, 238), verts);
-	wall3 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(25, 5, -25), 0, 0.0f, vec3(0.01, 10, 50), vec3(238, 130, 238), verts);
-	wall4 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-75, 5, -25), 0, 0.0f, vec3(0.01, 10, 50), vec3(238, 130, 238), verts);
-	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10000, -10000, -10000), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts);
+	//model = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0), 0, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), verts);
+	//model1 = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5.5, 0, 0), 0, 0.0f, vec3(.25, .25, .25), vec3(238, 130, 238), verts);
+	//model2 = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5, 0, 0.5), 0, 0.0f, vec3(.25, .25, .25), vec3(238, 130, 238), verts);
+	//model3 = new Cube(cube, shaderIndex, modelFaces, numFaces.size(), vec3(5.5, 0, 0.5), 0, 0.0f, vec3(.25, .25, .25), vec3(238, 130, 238), verts);
+	car = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.1, 0), 180, 0.0f, vec3(.1, .05, .2), vec3(238, 130, 238), verts, false);
+	plane = new Cube(groundShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0, -25), 0, 0.0f, vec3(50, 0.01, 50), vec3(238, 130, 238), verts, false);
+	wall1 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, -25), 0, 0.0f, vec3(50, 10, 0.1), vec3(238, 130, 238), verts, true);
+	wall2 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 5, 75), 0, 0.0f, vec3(50, 10, 0.1), vec3(238, 130, 238), verts, true);
+	wall3 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(25, 5, -25), 0, 0.0f, vec3(0.1, 10, 50), vec3(238, 130, 238), verts, true);
+	wall4 = new Cube(wallShape, shaderIndex, modelFaces, numFaces.size(), vec3(-75, 5, -25), 0, 0.0f, vec3(0.1, 10, 50), vec3(238, 130, 238), verts, true);
+	bullet = new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-10000, -10000, -10000), 0, 0.0f, vec3(0.05, 0.05, 0.05), vec3(238, 130, 238), verts, false);
 	obstacles = vector<Cube*>();
 	// keep any obstacles added within these X (-75 , 25) and Z (-25 , 75) values
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-40, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, 14), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-64, 0.5, 30), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(10, 0.5, 47), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(15, 0.5, 24), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(3, 0.5, 60), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-32, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0.5, 20), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(1, 0.5, 5), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-18, 0.5, 15), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(-9, 0.5, 3), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
-	obstacles.push_back(new Cube(carShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, -4), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-40, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, 14), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-64, 0.5, 30), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(10, 0.5, 47), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(15, 0.5, 24), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(3, 0.5, 60), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-32, 0.5, 0), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-25, 0.5, 20), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(1, 0.5, 5), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-18, 0.5, 15), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(-9, 0.5, 3), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
+	obstacles.push_back(new Cube(objectShape, shaderIndex, modelFaces, numFaces.size(), vec3(0, 0.5, -4), 180, 0.0f, vec3(.5, .5, .5), vec3(0, 0, 0), verts, false));
 	//teapotModel = new Cube(teapot, shaderIndex, teaFaces, teapotNumFaces.size(), vec3(0, 0, 0), 45, 0.0f, vec3(.1, .1, .1), vec3(238, 130, 238), teapotVerts);
 	camera = new Camera();
 
 	glClearColor(r, g, b, 1.0f);
+	treant = ColliderTree(vec3(0.0f, 0.0f, 0.0f), vec3(100.0f, 100.0f, 100.0f));
+	//treant.add(model);
+	//treant.add(model1);
+	//treant.add(model2);
+	//treant.add(model3);
+	treant.add(wall1);
+	treant.add(wall2);
+	treant.add(wall3);
+	treant.add(wall4);
+	for (int i = 0; i < obstacles.size(); i++)
+	{
+		treant.add(obstacles[i]);
+	}
+	treant.print();
+
 }
 
 void update()
@@ -189,8 +214,26 @@ void update()
 	ObjectList[i]->Update(dt);
 	}
 	}*/
+	
 	car->Update(dt);
+	vector<Cube*> collided = treant.collidedObjects(car);
+	if (collided.size() > 0)
+	{
+		car->velocity *= -1.0f;
+	}
 	bullet->Update(dt);
+
+	collided = treant.collidedObjects(bullet);
+
+	for (int i = 0; i < collided.size(); i++)
+	{
+ 		bullet->velocity = vec3(0.0f, 0.0f, 0.0f);
+		if (!collided[i]->isWall)
+		{
+			collided[i]->isVisible = false;
+		}
+		
+	}
 	// check the bullet's velocity, stop drawing if really small
 	vec3 velTest = bullet->velocity;
 	if (velTest.x < 0)
@@ -213,7 +256,10 @@ void update()
 	}
 	for (int i = 0; i < obstacles.size(); i++)
 	{
-		obstacles[i]->Update(dt);
+		if (obstacles[i]->isVisible == true)
+		{
+			obstacles[i]->Update(dt);
+		}
 	}
 	//model->Update(dt);
 	//teapotModel->Update(dt);
@@ -249,6 +295,9 @@ void draw()
 	}*/
 
 	//model->Draw();
+	//model1->Draw();
+	//model2->Draw();
+	//model3->Draw();
 	//teapotModel->Draw();
 	car->Draw();
 	// only draw visible bullet
@@ -258,7 +307,10 @@ void draw()
 	}
 	for (int i = 0; i < obstacles.size(); i++)
 	{
-		obstacles[i]->Draw();
+		if (obstacles[i]->isVisible == true)
+		{
+			obstacles[i]->Draw();
+		}
 	}
 	plane->Draw();
 	wall1->Draw();

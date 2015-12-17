@@ -65,7 +65,7 @@ bool Node::collidesWith(Cube* otherColliderPtr)
 	{
 		for each (Cube* colliderPtr in colliderPtrs)
 		{
-			if (colliderPtr != nullptr)
+			if (colliderPtr != nullptr && colliderPtr->isVisible == true)
 			{
 				if (colliderPtr->TestOBBOBB(*otherColliderPtr))
 					return true;
@@ -123,27 +123,40 @@ vector<Cube*> Node::checkCollisions(Cube* otherColliderPtr)
 		for (int i = 0; i < leftCollisions.size(); i++)
 		{
 			Cube* cube = leftCollisions[i];
-			collidedObjects.push_back(cube);
+			if (cube->isVisible)
+			{
+				collidedObjects.push_back(cube);
+			}
+			
 		}
 
 		for (int i = 0; i < rightCollisions.size(); i++)
 		{
 			Cube* cube = rightCollisions[i];
-			collidedObjects.push_back(cube);
+			if (cube->isVisible)
+			{
+				collidedObjects.push_back(cube);
+			}
 		}
 
 
 		for (int i = 0; i < upCollisions.size(); i++)
 		{
 			Cube* cube = upCollisions[i];
-			collidedObjects.push_back(cube);
+			if (cube->isVisible)
+			{
+				collidedObjects.push_back(cube);
+			}
 		}
 
 
 		for (int i = 0; i < downCollisions.size(); i++)
 		{
 			Cube* cube = downCollisions[i];
-			collidedObjects.push_back(cube);
+			if (cube->isVisible)
+			{
+				collidedObjects.push_back(cube);
+			}
 		}
 
 		return collidedObjects;
@@ -175,10 +188,14 @@ void Node::branch()
 	//make child nodes
 	vec3 qWidth = vec3(binBox.OBB.halfWidths.x * .5, binBox.OBB.halfWidths.y, binBox.OBB.halfWidths.z * .5);
 
-	leftChild = new Node(vec3(binBox.OBB.c.x - qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z + qWidth.z), qWidth);
-	rightChild = new Node(vec3(binBox.OBB.c.x + qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z + qWidth.z), qWidth);
-	upChild = new Node(vec3(binBox.OBB.c.x - qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z - qWidth.z), qWidth);
-	downChild = new Node(vec3(binBox.OBB.c.x + qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z - qWidth.z), qWidth);
+	leftChild = new Node(vec3(0,0,0), qWidth);
+	leftChild->binBox.worldMatrix = translate(vec3(binBox.OBB.c.x - qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z + qWidth.z)) * rotate(0.0f, vec3(0, 1, 0)) * scale(vec3(1, 1, 1));
+	rightChild = new Node(vec3(0,0,0), qWidth);
+	rightChild->binBox.worldMatrix = translate(vec3(binBox.OBB.c.x + qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z + qWidth.z)) * rotate(0.0f, vec3(0, 1, 0)) * scale(vec3(1, 1, 1));
+	upChild = new Node(vec3(0,0,0), qWidth);
+	upChild->binBox.worldMatrix = translate(vec3(binBox.OBB.c.x - qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z - qWidth.z)) * rotate(0.0f, vec3(0, 1, 0)) * scale(vec3(1, 1, 1));
+	downChild = new Node(vec3(0,0,0), qWidth);
+	downChild->binBox.worldMatrix = translate(vec3(binBox.OBB.c.x + qWidth.x, binBox.OBB.c.y, binBox.OBB.c.z - qWidth.z)) * rotate(0.0f, vec3(0, 1, 0)) * scale(vec3(1,1,1));
 	//add this node's colliders to the the children
 	//set this node's colliders to nullptr
 	for (int i = 0; i < count; i++)

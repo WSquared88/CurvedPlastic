@@ -9,7 +9,7 @@ public:
 	Cube binBox;
 
 	int count = 0;
-	const int capacity = 4;
+	const int capacity = 10;
 
 	std::vector<Cube*> colliderPtrs;
 
